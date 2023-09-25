@@ -5,12 +5,73 @@ export default function SignUpView() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [hasAccount, setHasAccount] = useState(false);
 
   const handleSignUp = () => {
     if (!username || !password || !confirmPassword) {
       return alert('Por favor, complete todos los campos');
     }
     confirmPassword === password ? alert(`Bienvenido ${username}`) : alert('Las contraseñas no coinciden');
+  };
+
+  const handleLogin = () => {
+    if (!username || !password) {
+      return alert('Por favor, complete todos los campos');
+    }
+    alert(`Bienvenido ${username}`);
+  };
+
+  const renderForm = () => {
+    if (hasAccount) {
+      return (
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre de usuario"
+            value={username}
+            onChangeText={setUsername}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity style={styles.buttonA} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Iniciar sesión</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Nombre de usuario"
+            value={username}
+            onChangeText={setUsername}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Confirmar contraseña"
+            secureTextEntry
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+          <TouchableOpacity style={styles.buttonB} onPress={handleSignUp}>
+            <Text style={styles.buttonText}>Crear cuenta</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
   };
 
   return (
@@ -21,35 +82,13 @@ export default function SignUpView() {
       />
       <Text style={styles.title}>E A S A</Text>
       <Text style={styles.titleDown}>Earth Aeronautics and Space Administration</Text>
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre de usuario"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirmar contraseña"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-      />
+      {renderForm()}
       <View style={styles.buttonLine}>
-        <TouchableOpacity style={styles.buttonA} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Crear cuenta</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonB} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Ya tengo cuenta</Text>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={() => setHasAccount(!hasAccount)}>
+        <Text style={styles.switchText}>
+          {hasAccount ? '¿No tienes una cuenta? Regístrate' : '¿Ya tienes una cuenta? Inicia sesión'}
+        </Text>
+      </TouchableOpacity>
       </View>
     </View>
   );
