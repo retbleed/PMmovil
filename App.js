@@ -6,6 +6,11 @@ export default function SignUpView() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [hasAccount, setHasAccount] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [changePassword, setChangePassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   const handleSignUp = () => {
     if (!username || !password || !confirmPassword) {
@@ -21,8 +26,62 @@ export default function SignUpView() {
     alert(`Bienvenido ${username}`);
   };
 
+  const handleForgotPassword = () => {
+    // Send password reset link to user's email
+    alert(`Se ha enviado un enlace de restablecimiento de contraseña a ${email}`);
+  };
+
+  const handleChangePassword = () => {
+    if (!currentPassword || !newPassword) {
+      return alert('Por favor, complete todos los campos');
+    }
+    alert('Contraseña cambiada exitosamente');
+  };
+
   const renderForm = () => {
-    if (hasAccount) {
+    if (forgotPassword) {
+      return (
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Correo electrónico"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TouchableOpacity style={styles.buttonA} onPress={handleForgotPassword}>
+            <Text style={styles.buttonText}>Enviar enlace de restablecimiento de contraseña</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setForgotPassword(false)}>
+            <Text style={styles.switchText}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else if (changePassword) {
+      return (
+        <View>
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña actual"
+            secureTextEntry
+            value={currentPassword}
+            onChangeText={setCurrentPassword}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Nueva contraseña"
+            secureTextEntry
+            value={newPassword}
+            onChangeText={setNewPassword}
+          />
+          <TouchableOpacity style={styles.buttonA} onPress={handleChangePassword}>
+            <Text style={styles.buttonText}>Cambiar contraseña</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setChangePassword(false)}>
+            <Text style={styles.switchText}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else if (hasAccount) {
       return (
         <View>
           <TextInput
@@ -40,6 +99,12 @@ export default function SignUpView() {
           />
           <TouchableOpacity style={styles.buttonA} onPress={handleLogin}>
             <Text style={styles.buttonText}>Iniciar sesión</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setForgotPassword(true)}>
+            <Text style={styles.switchText}>¿Olvidaste tu contraseña?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setChangePassword(true)}>
+            <Text style={styles.switchText}>Cambiar contraseña</Text>
           </TouchableOpacity>
         </View>
       );
@@ -66,8 +131,11 @@ export default function SignUpView() {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
           />
-          <TouchableOpacity style={styles.buttonB} onPress={handleSignUp}>
+          <TouchableOpacity style={styles.buttonA} onPress={handleSignUp}>
             <Text style={styles.buttonText}>Crear cuenta</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setHasAccount(true)}>
+            <Text style={styles.switchText}>¿Ya tienes una cuenta? Inicia sesión</Text>
           </TouchableOpacity>
         </View>
       );
@@ -83,13 +151,6 @@ export default function SignUpView() {
       <Text style={styles.title}>E A S A</Text>
       <Text style={styles.titleDown}>Earth Aeronautics and Space Administration</Text>
       {renderForm()}
-      <View style={styles.buttonLine}>
-      <TouchableOpacity onPress={() => setHasAccount(!hasAccount)}>
-        <Text style={styles.switchText}>
-          {hasAccount ? '¿No tienes una cuenta? Regístrate' : '¿Ya tienes una cuenta? Inicia sesión'}
-        </Text>
-      </TouchableOpacity>
-      </View>
     </View>
   );
 }
